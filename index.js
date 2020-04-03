@@ -3,7 +3,12 @@ const { ApolloServer } = require('apollo-server');
 
 const typeDefs = gql`
   type Query {
-    knownDrugs(page: Int): KnownDrugs
+    knownDrugs(page: Pagination): KnownDrugs
+  }
+
+  input Pagination {
+    index: Int!
+    size: Int!
   }
 
   type KnownDrugs {
