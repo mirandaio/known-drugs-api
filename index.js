@@ -11,7 +11,7 @@ const typeDefs = gql`
 
   input Filters {
     disease: String
-    phase: String
+    phase: Int
     status: String
     source: String
     drug: String
@@ -119,8 +119,8 @@ function filter(data, filters) {
 const resolvers = {
   Query: {
     knownDrugs(_, { page, sort, filters }) {
-      // let drugs = filter(knownDrugsData, filters);
-      let drugs = sortDrugs(knownDrugsData, sort);
+      let drugs = filter(knownDrugsData, filters);
+      drugs = sortDrugs(drugs, sort);
       drugs = getPage(drugs, page);
 
       return {
