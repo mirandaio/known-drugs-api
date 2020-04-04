@@ -6,7 +6,18 @@ const knownDrugsData = JSON.parse(fs.readFileSync('./ESR1-known-drugs.json', 'ut
 
 const typeDefs = gql`
   type Query {
-    knownDrugs(page: Pagination, sort: SortInput): KnownDrugs
+    knownDrugs(page: Pagination, sort: SortInput, filters: Filters): KnownDrugs
+  }
+
+  input Filters {
+    disease: String
+    phase: String
+    status: String
+    source: String
+    drug: String
+    type: String
+    mechanism: String
+    activity: String
   }
 
   input Pagination {
@@ -31,7 +42,7 @@ const typeDefs = gql`
   type KnownDrug {
     disease: String!
     phase: Int!
-    status: String!
+    status: String
     source: String!
     drug: String!
     type: String!
@@ -46,8 +57,10 @@ function sortDrugs(data, sort) {
   const { sortBy, direction } = sort;
 
   return data.sort((a, b) => {
+    if (a[sortBy] === b[sortBy]) return 0;
+
     if (direction === 'asc') {
-      if (a[sortBy] < b[sortBy]) {
+      if (a[sortBy] === null || a[sortBy] < b[sortBy]) {
         return -1;
       }
 
@@ -55,9 +68,8 @@ function sortDrugs(data, sort) {
         return 1;
       }
 
-      return 0;
     } else {
-      if (a[sortBy] < b[sortBy]) {
+      if (a[sortBy] === null || a[sortBy] < b[sortBy]) {
         return 1;
       }
 
@@ -65,7 +77,6 @@ function sortDrugs(data, sort) {
         return -1;
       }
 
-      return 0;
     }
   });
 }
@@ -101,9 +112,14 @@ function getPage(data, page) {
   });
 }
 
+function filter(data, filters) {
+  return data;
+}
+
 const resolvers = {
   Query: {
-    knownDrugs(_, { page, sort }) {
+    knownDrugs(_, { page, sort, filters }) {
+      // let drugs = filter(knownDrugsData, filters);
       let drugs = sortDrugs(knownDrugsData, sort);
       drugs = getPage(drugs, page);
 
