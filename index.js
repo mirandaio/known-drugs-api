@@ -1,6 +1,7 @@
 const gql = require('graphql-tag');
 const { ApolloServer } = require('apollo-server');
 const fs = require('fs');
+const Fuse = require('fuse.js');
 
 const knownDrugsData = JSON.parse(fs.readFileSync('./ESR1-known-drugs.json', 'utf8'));
 
@@ -84,7 +85,7 @@ function sortDrugs(data, sort) {
 function getPage(data, page) {
   if (page) {
     const i = page.size * page.index;
-    return knownDrugsData.slice(i, i + page.size).map(d => {
+    return data.slice(i, i + page.size).map(d => {
       return {
         disease: d.disease,
         phase: d.phase,
@@ -98,7 +99,7 @@ function getPage(data, page) {
     })
   }
 
-  return knownDrugsData.slice(0, 10).map(d => {
+  return data.slice(0, 10).map(d => {
     return {
       disease: d.disease,
       phase: d.phase,
@@ -112,8 +113,27 @@ function getPage(data, page) {
   });
 }
 
+const options = {
+  isCaseSensitive: false,
+  // minMatchCharLength: 5,
+  threshold: 0.6,
+  keys: [ 'disease' ]
+};
+
 function filter(data, filters) {
-  return data;
+  const {
+    disease, phase, status, source, drug, type, mechanism, activity
+  } = filters;
+
+  let filteredData = data;
+
+
+  if (disease) {
+    const fuseDisease = new Fuse(filteredData, options);
+    filteredData = fuseDisease.search(disease).map(d => d.item);
+  }
+
+  return filteredData;
 }
 
 const resolvers = {
