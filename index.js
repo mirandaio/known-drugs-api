@@ -61,7 +61,10 @@ function sortDrugs(data, sort) {
     if (a[sortBy] === b[sortBy]) return 0;
 
     if (direction === 'asc') {
-      if (a[sortBy] === null || a[sortBy] < b[sortBy]) {
+      if (a[sortBy] === null) return -1;
+      if (b[sortBy] === null) return 1; 
+
+      if (a[sortBy] < b[sortBy]) {
         return -1;
       }
 
@@ -70,7 +73,10 @@ function sortDrugs(data, sort) {
       }
 
     } else {
-      if (a[sortBy] === null || a[sortBy] < b[sortBy]) {
+      if (a[sortBy] === null) return 1;
+      if (b[sortBy] === null) return -1; 
+
+      if (a[sortBy] < b[sortBy]) {
         return 1;
       }
 
