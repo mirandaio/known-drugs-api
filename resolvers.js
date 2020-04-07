@@ -6,32 +6,10 @@ const knownDrugsData = JSON.parse(fs.readFileSync('./ESR1-known-drugs.json', 'ut
 function getPage(data, page) {
   if (page) {
     const i = page.size * page.index;
-    return data.slice(i, i + page.size).map(d => {
-      return {
-        disease: d.disease,
-        phase: d.phase,
-        status: d.status,
-        source: d.source,
-        drug: d.drug,
-        type: d.type,
-        mechanism: d.mechanism,
-        activity: d.activity
-      };
-    })
+    return data.slice(i, i + page.size);
   }
 
-  return data.slice(0, 10).map(d => {
-    return {
-      disease: d.disease,
-      phase: d.phase,
-      status: d.status,
-      source: d.source,
-      drug: d.drug,
-      type: d.type,
-      mechanism: d.mechanism,
-      activity: d.activity
-    };
-  });
+  return data.slice(0, 10);
 }
 
 function sortDrugs(data, sort) {
@@ -69,10 +47,6 @@ function sortDrugs(data, sort) {
     }
   });
 }
-
-
-
-
 
 function filter(data, filters) {
   if (!filters) return data;
