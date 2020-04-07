@@ -126,9 +126,7 @@ function filter(data, filters) {
     disease, phase, status, source, drug, type, mechanism, activity
   } = filters;
 
-
   let filteredData = data;
-
 
   if (disease) {
     const fuseDisease = new Fuse(filteredData, { keys: [ 'disease' ]});
@@ -176,12 +174,13 @@ const resolvers = {
   Query: {
     knownDrugs(_, { page, sort, filters }) {
       let drugs = filter(knownDrugsData, filters);
+      const total = drugs.length;
       drugs = sortDrugs(drugs, sort);
       drugs = getPage(drugs, page);
 
       return {
         aggregations: {
-          total: knownDrugsData.length
+          total
         },
         rows: drugs
       };
