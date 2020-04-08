@@ -2,21 +2,15 @@ const { gql } = require('apollo-server');
 
 const typeDefs = gql`
   type Query {
-    knownDrugs(page: Pagination, sort: SortInput, filters: Filters): KnownDrugs
+    knownDrugs(page: Page, sort: SortInput, filters: [Filter!]): KnownDrugs
   }
 
-  input Filters {
-    disease: String
-    phase: Int
-    status: String
-    source: String
-    drug: String
-    type: String
-    mechanism: String
-    activity: String
+  input Filter {
+    filterBy: String!
+    value: String!
   }
 
-  input Pagination {
+  input Page {
     index: Int!
     size: Int!
   }
