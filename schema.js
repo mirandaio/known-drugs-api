@@ -33,6 +33,7 @@ const typeDefs = gql`
 
   type Aggregations {
     total: Int
+    filteredTotal: Int
   }
 
   type KnownDrug {

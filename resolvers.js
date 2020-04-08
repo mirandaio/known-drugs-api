@@ -99,18 +99,22 @@ function filter(data, filters) {
   return filteredData;
 }
 
+const computeAggregations = drugs => {
+  return {
+    total: knownDrugsData.length,
+    filteredTotal: drugs.length,
+  };
+};
+
 const resolvers = {
   Query: {
     knownDrugs(_, { page, sort, filters }) {
-      let drugs = filter(knownDrugsData, filters);
-      const total = drugs.length;
-      drugs = sortDrugs(drugs, sort);
+      const filteredDrugs = filter(knownDrugsData, filters);
+      let drugs = sortDrugs(filteredDrugs, sort);
       drugs = getPage(drugs, page);
 
       return {
-        aggregations: {
-          total
-        },
+        aggregations: computeAggregations(filteredDrugs),
         rows: drugs
       };
     }
