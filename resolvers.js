@@ -62,10 +62,40 @@ function filter(data, filters) {
 }
 
 const computeAggregations = drugs => {
-  
+  const uniqueDrugs = new Set();
+  const uniqueDiseases = new Set();
+  const uniqueDrugsByActivity = {};
+  const uniqueDrugsByType = {};
+  const clinicalTrialsByPhase = {};
+
+  for (let i = 0; i < drugs.length; i++) {
+    const row = drugs[i];
+    uniqueDrugs.add(row.drug);
+    uniqueDiseases.add(row.disease);
+
+    if (uniqueDrugsByActivity[row.activity]) {
+      uniqueDrugsByActivity[row.activity].add(row.drug);
+    } else {
+      uniqueDrugsByActivity[row.activity] = new Set();
+      uniqueDrugsByActivity[row.activity].add(row.drug);
+    }
+
+    if (uniqueDrugsByType[row.type]) {
+      uniqueDrugsByType[row.type].add(row.drug);
+    } else {
+      uniqueDrugsByType[row.type] = new Set();
+      uniqueDrugsByType[row.type].add(row.drug)
+    }
+  }
+
   return {
-    total: knownDrugsData.length,
-    filteredTotal: drugs.length,
+    total: drugs.length,
+    uniqueDrugs: uniqueDrugs.size,
+    uniqueDiseases: uniqueDiseases.size,
+    uniqueDrugsByType: Object.entries(uniqueDrugsByType)
+      .map(d => ({ category: d[0], count: d[1].size })),
+    uniqueDrugsByActivity: Object.entries(uniqueDrugsByActivity)
+      .map(d => ({ category: d[0], count: d[1].size }))
   };
 };
 

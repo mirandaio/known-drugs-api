@@ -26,8 +26,16 @@ const typeDefs = gql`
   }
 
   type Aggregations {
-    total: Int
-    filteredTotal: Int
+    total: Int!
+    uniqueDrugs: Int!
+    uniqueDiseases: Int!
+    uniqueDrugsByType: [Count!]!
+    uniqueDrugsByActivity: [Count!]!
+  }
+
+  type Count {
+    category: String!
+    count: Int!
   }
 
   type KnownDrug {
