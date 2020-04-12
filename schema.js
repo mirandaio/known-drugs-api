@@ -39,14 +39,70 @@ const typeDefs = gql`
   }
 
   type KnownDrug {
-    disease: String!
+    target: Target!
+    disease: Disease!
+    drug: EvDrug!
+    clinicalTrial: ClinicalTrial!
+    mechanismOfAction: EvidenceMechanismOfAction!
+  }
+
+  type Target {
+    id: String!
+    symbol: String!
+  }
+
+  type Disease {
+    id: String!
+    name: String!
+  }
+
+  type EvDrug {
+    id: String!
+    name: String!
+    type: DrugType!
+    activity: DrugActivity!
+  }
+
+  enum DrugType {
+    SMALL_MOLECULE
+    PROTEIN
+    ENZYME
+    ANTIBODY
+    OLIGOSACCHARIDE
+    OLIGONUCLEOTIDE
+    UNKNOWN
+  }
+
+  enum DrugActivity {
+    POSITIVE_MODULATOR
+    NEGATIVE_MODULATOR
+    OTHER
+  }
+
+  type ClinicalTrial {
     phase: Int!
-    status: String
-    source: String!
-    drug: String!
-    type: String!
-    mechanism: String!
-    activity: String!
+    status: ClinicalTrialStatus
+    sourceUrl: String!
+    sourceName: String!
+  }
+
+  enum ClinicalTrialStatus {
+    ACTIVE_NOT_RECRUITING
+    COMPLETED
+    NOT_APPLICABLE
+    NOT_YET_RECRUITING
+    RECRUITING
+    SUSPENDED
+    TERMINATED
+    UNKNOWN_STATUS
+    WITHDRAWN
+    ENROLLING_BY_INVITATION
+  }
+
+  type EvidenceMechanismOfAction {
+    name: String!
+    sourceName: String
+    sourceUrl: String
   }
 `;
 

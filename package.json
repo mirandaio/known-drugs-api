@@ -20,7 +20,8 @@
   "homepage": "https://github.com/mirandaio/known-drugs-api#readme",
   "dependencies": {
     "apollo-server": "2.11.0",
-    "fuse.js": "5.1.0"
+    "fuse.js": "5.1.0",
+    "lodash.orderby": "4.6.0"
   },
   "engines": {
     "node": "11.x"
