@@ -28,6 +28,7 @@ const typeDefs = gql`
   type Aggregations {
     total: Int!
     uniqueDrugs: Int!
+    clinicalTrials: Int!
     uniqueDiseases: Int!
     clinicalTrialsByPhase: [Count!]!
     uniqueDrugsByType: [Count!]!

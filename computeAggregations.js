@@ -1,5 +1,6 @@
 const computeAggregations = drugs => {
   const uniqueDrugs = new Set();
+  const clinicalTrials = new Set();
   const uniqueDiseases = new Set();
   const uniqueDrugsByActivity = {};
   const uniqueDrugsByType = {};
@@ -8,6 +9,7 @@ const computeAggregations = drugs => {
   for (let i = 0; i < drugs.length; i++) {
     const row = drugs[i];
     uniqueDrugs.add(row.drug.name);
+    clinicalTrials.add(row.clinicalTrial.sourceUrl);
     uniqueDiseases.add(row.disease.name);
 
     if (clinicalTrialsByPhase[row.clinicalTrial.phase]) {
@@ -35,6 +37,7 @@ const computeAggregations = drugs => {
   return {
     total: drugs.length,
     uniqueDrugs: uniqueDrugs.size,
+    clinicalTrials: clinicalTrials.size,
     uniqueDiseases: uniqueDiseases.size,
     clinicalTrialsByPhase: Object.entries(clinicalTrialsByPhase)
       .map(d => ({ category: d[0], count: d[1].size })),
