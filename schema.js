@@ -29,6 +29,7 @@ const typeDefs = gql`
     total: Int!
     uniqueDrugs: Int!
     uniqueDiseases: Int!
+    clinicalTrialsByPhase: [Count!]!
     uniqueDrugsByType: [Count!]!
     uniqueDrugsByActivity: [Count!]!
   }

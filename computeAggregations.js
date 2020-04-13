@@ -10,6 +10,13 @@ const computeAggregations = drugs => {
     uniqueDrugs.add(row.drug.name);
     uniqueDiseases.add(row.disease.name);
 
+    if (clinicalTrialsByPhase[row.clinicalTrial.phase]) {
+      clinicalTrialsByPhase[row.clinicalTrial.phase].add(row.clinicalTrial.sourceUrl);
+    } else {
+      clinicalTrialsByPhase[row.clinicalTrial.phase] = new Set();
+      clinicalTrialsByPhase[row.clinicalTrial.phase].add(row.clinicalTrial.sourceUrl);
+    }
+
     if (uniqueDrugsByActivity[row.drug.activity]) {
       uniqueDrugsByActivity[row.drug.activity].add(row.drug.name);
     } else {
@@ -29,6 +36,8 @@ const computeAggregations = drugs => {
     total: drugs.length,
     uniqueDrugs: uniqueDrugs.size,
     uniqueDiseases: uniqueDiseases.size,
+    clinicalTrialsByPhase: Object.entries(clinicalTrialsByPhase)
+      .map(d => ({ category: d[0], count: d[1].size })),
     uniqueDrugsByType: Object.entries(uniqueDrugsByType)
       .map(d => ({ category: d[0], count: d[1].size })),
     uniqueDrugsByActivity: Object.entries(uniqueDrugsByActivity)
