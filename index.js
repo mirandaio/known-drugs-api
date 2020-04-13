@@ -7,7 +7,6 @@ const server = new ApolloServer({
   resolvers,
   playground: true,
   introspection: true,
-  cors: false
 });
 
 server.listen({ port: process.env.PORT || 4000 })
