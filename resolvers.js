@@ -1,6 +1,6 @@
 const fs = require('fs');
 const Fuse = require('fuse.js');
-const orderBy = require('lodash.orderBy');
+const orderBy = require('lodash.orderby');
 const computeAggregations = require('./computeAggregations');
 
 const KEY_MAP = {
