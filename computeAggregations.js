@@ -1,4 +1,4 @@
-const computeAggregations = drugs => {
+const computeAggregations = data => {
   const uniqueDrugs = new Set();
   const clinicalTrials = new Set();
   const uniqueDiseases = new Set();
@@ -6,36 +6,38 @@ const computeAggregations = drugs => {
   const uniqueDrugsByType = {};
   const clinicalTrialsByPhase = {};
 
-  for (let i = 0; i < drugs.length; i++) {
-    const row = drugs[i];
-    uniqueDrugs.add(row.drug.name);
-    clinicalTrials.add(row.clinicalTrial.sourceUrl);
+  data.forEach(row => {
+    const { phase, sourceUrl } = row.clinicalTrial;
+    const { activity, type, name } = row.drug;
+
+    uniqueDrugs.add(name);
+    clinicalTrials.add(sourceUrl);
     uniqueDiseases.add(row.disease.name);
 
-    if (clinicalTrialsByPhase[row.clinicalTrial.phase]) {
-      clinicalTrialsByPhase[row.clinicalTrial.phase].add(row.clinicalTrial.sourceUrl);
+    if (clinicalTrialsByPhase[phase]) {
+      clinicalTrialsByPhase[phase].add(sourceUrl);
     } else {
-      clinicalTrialsByPhase[row.clinicalTrial.phase] = new Set();
-      clinicalTrialsByPhase[row.clinicalTrial.phase].add(row.clinicalTrial.sourceUrl);
+      clinicalTrialsByPhase[phase] = new Set();
+      clinicalTrialsByPhase[phase].add(sourceUrl);
     }
 
-    if (uniqueDrugsByActivity[row.drug.activity]) {
-      uniqueDrugsByActivity[row.drug.activity].add(row.drug.name);
+    if (uniqueDrugsByActivity[activity]) {
+      uniqueDrugsByActivity[activity].add(name);
     } else {
-      uniqueDrugsByActivity[row.drug.activity] = new Set();
-      uniqueDrugsByActivity[row.drug.activity].add(row.drug.name);
+      uniqueDrugsByActivity[activity] = new Set();
+      uniqueDrugsByActivity[activity].add(name);
     }
 
-    if (uniqueDrugsByType[row.drug.type]) {
-      uniqueDrugsByType[row.drug.type].add(row.drug.name);
+    if (uniqueDrugsByType[type]) {
+      uniqueDrugsByType[type].add(name);
     } else {
-      uniqueDrugsByType[row.drug.type] = new Set();
-      uniqueDrugsByType[row.drug.type].add(row.drug.name);
+      uniqueDrugsByType[type] = new Set();
+      uniqueDrugsByType[type].add(name);
     }
-  }
+  });
 
   return {
-    total: drugs.length,
+    total: data.length,
     uniqueDrugs: uniqueDrugs.size,
     clinicalTrials: clinicalTrials.size,
     uniqueDiseases: uniqueDiseases.size,
