@@ -40,7 +40,7 @@ function filter(data, filters) {
   let filteredData = data;
 
   filters.forEach(filter => {
-    const fuse = new Fuse(filteredData, { keys: [ KEY_MAP[filter.filterBy] ] });
+    const fuse = new Fuse(filteredData, { threshold: 0.4, keys: [ KEY_MAP[filter.filterBy] ] });
     filteredData = fuse.search(filter.value).map(d => d.item);
   });
 
